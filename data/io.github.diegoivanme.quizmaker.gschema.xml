@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="quizmaker">
+	<schema id="io.github.diegoivanme.quizmaker" path="/io/github/diegoivanme/quizmaker/">
+	</schema>
+</schemalist>

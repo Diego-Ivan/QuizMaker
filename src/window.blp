@@ -1,0 +1,28 @@
+using Gtk 4.0;
+using Adw 1;
+
+template QuizmakerWindow : Adw.ApplicationWindow {
+   default-width: 500;
+   default-height: 600;
+   width-request: 360;
+   title: _("Quiz Maker");
+
+   Gtk.Box {
+      orientation: vertical;
+
+      Gtk.HeaderBar {
+         show-title-buttons: true;
+
+         [start]
+         Gtk.MenuButton {
+            icon-name: "open-menu-symbolic";
+         }
+      }
+
+      Gtk.Label {
+         vexpand: true;
+         valign: center;
+         label: "Hello World";
+      }
+   }
+}

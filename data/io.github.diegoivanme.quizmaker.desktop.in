@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=quizmaker
+Exec=quizmaker
+Icon=io.github.diegoivanme.quizmaker
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true
