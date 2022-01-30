@@ -7,6 +7,7 @@ quizmaker_sources = [
 quizmaker_deps = [
   dependency('gtk4'),
   dependency('libadwaita-1'),
+  dependency('libpanel-1'),
 ]
 
 blueprints_src = [

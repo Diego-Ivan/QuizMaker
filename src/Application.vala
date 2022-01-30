@@ -20,10 +20,8 @@ namespace Quizmaker {
 	public class Application : Adw.Application {
 		private ActionEntry[] APP_ACTIONS = {
 			{ "about", on_about_action },
-			{ "preferences", on_preferences_action },
-			{ "quit", quit }
+			{ "quit", quit_action }
 		};
-
 
 		public Application () {
 			Object (
@@ -37,11 +35,17 @@ namespace Quizmaker {
 
 		public override void activate () {
 			base.activate();
+			Panel.init ();
 			var win = active_window;
 			if (win == null) {
-				win = new Quizmaker.Window (this);
+				win = new Window (this);
 			}
 			win.present ();
+		}
+
+		private void quit_action () {
+		    active_window.close_request ();
+		    quit ();
 		}
 
 		private void on_about_action () {
@@ -63,10 +67,6 @@ namespace Quizmaker {
                 "translator-credits", _("translator-credits"),
                 null
             );
-		}
-
-		private void on_preferences_action () {
-			message("app.preferences action activated");
 		}
 	}
 }

@@ -24,6 +24,18 @@
         "*.a"
     ],
     "modules" : [
+    		{
+    			"name": "libpanel",
+    			"builddir": false,
+					"buildsystem": "meson",
+					"sources": [
+						{
+							"type": "git",
+							"commit": "aef5c4dfc84c1338ee9a8c47543f8c167a61bc43",
+							"url": "https://gitlab.gnome.org/chergert/libpanel.git"
+						}
+					]
+    		},
         {
             "name" : "quizmaker",
             "builddir" : true,
