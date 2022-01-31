@@ -34,8 +34,8 @@ namespace Quizmaker {
 		}
 
 		public override void activate () {
-			base.activate();
 			Panel.init ();
+			base.activate();
 			var win = active_window;
 			if (win == null) {
 				win = new Window (this);

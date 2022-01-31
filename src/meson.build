@@ -2,6 +2,7 @@ quizmaker_sources = [
   'main.vala',
   'Window.vala',
   'Application.vala',
+  'SlideRow.vala',
  ]
 
 quizmaker_deps = [

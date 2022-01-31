@@ -1,8 +1,9 @@
 using Gtk 4.0;
 using Adw 1;
+using Panel 1;
 
 template QuizmakerWindow : Adw.ApplicationWindow {
-   default-width: 500;
+   default-width: 900;
    default-height: 600;
    width-request: 360;
    title: _("Quiz Maker");
@@ -13,16 +14,82 @@ template QuizmakerWindow : Adw.ApplicationWindow {
       Gtk.HeaderBar {
          show-title-buttons: true;
 
+
          [start]
+         Panel.DockSwitcher {
+            dock: main_dock;
+            position: start;
+         }
+
+         [end]
          Gtk.MenuButton {
             icon-name: "open-menu-symbolic";
+            menu-model: action_menu;
          }
       }
 
-      Gtk.Label {
+      Panel.Dock main_dock {
+         reveal-start: true;
+         reveal-bottom: false;
+         reveal-end: false;
+         start-width: 250;
          vexpand: true;
-         valign: center;
-         label: "Hello World";
+
+         Panel.Grid grid {
+         }
+
+         [start]
+         Panel.Paned {
+            orientation: vertical;
+            Panel.Frame {
+               Panel.Widget {
+                  title: "Overview";
+                  can-maximize: true;
+                  icon-name: "view-list-symbolic";
+
+                  Gtk.Box {
+                     styles ["sidebar"]
+                     orientation: vertical;
+                     vexpand: true;
+
+                     Gtk.ScrolledWindow {
+                        propagate-natural-width: true;
+                        propagate-natural-height: true;
+                        vexpand: true;
+
+                        Gtk.ListBox questions_list {}
+                     }
+
+                     Gtk.Button {
+                        icon-name: "list-add-symbolic";
+                        hexpand: true;
+                        vexpand: true;
+                        valign: end;
+
+                        clicked => on_add_button_clicked ();
+                     }
+                  }
+               }
+
+               Panel.Widget {
+                  title: "Todo List";
+                  can-maximize: true;
+                  icon-name: "emblem-ok-symbolic";
+                  Adw.StatusPage {
+                     styles ["compact"]
+                     title: "No Pending Tasks";
+                     icon-name: "emblem-ok-symbolic";
+                  }
+               }
+            }
+         }
       }
+   }
+}
+
+menu action_menu {
+   item {
+      label: _("About QuizMaker");
+      action: "app.about";
    }
 }
