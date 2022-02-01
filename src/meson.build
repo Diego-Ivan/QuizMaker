@@ -3,7 +3,9 @@ quizmaker_sources = [
   'Window.vala',
   'Application.vala',
   'SlideRow.vala',
- ]
+  'TrashButton.vala',
+  'Sidebar.vala',
+]
 
 quizmaker_deps = [
   dependency('gtk4'),
@@ -13,6 +15,7 @@ quizmaker_deps = [
 
 blueprints_src = [
     'window.blp',
+    'sidebar.blp',
 ]
 blueprints_ui = []
 blueprints_vala = []

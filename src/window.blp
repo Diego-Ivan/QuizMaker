@@ -35,7 +35,7 @@ template QuizmakerWindow : Adw.ApplicationWindow {
          start-width: 250;
          vexpand: true;
 
-         Panel.Grid grid {
+         Gtk.Stack main_stack {
          }
 
          [start]
@@ -47,27 +47,8 @@ template QuizmakerWindow : Adw.ApplicationWindow {
                   can-maximize: true;
                   icon-name: "view-list-symbolic";
 
-                  Gtk.Box {
-                     styles ["sidebar"]
-                     orientation: vertical;
-                     vexpand: true;
-
-                     Gtk.ScrolledWindow {
-                        propagate-natural-width: true;
-                        propagate-natural-height: true;
-                        vexpand: true;
-
-                        Gtk.ListBox questions_list {}
-                     }
-
-                     Gtk.Button {
-                        icon-name: "list-add-symbolic";
-                        hexpand: true;
-                        vexpand: true;
-                        valign: end;
-
-                        clicked => on_add_button_clicked ();
-                     }
+                  .QuizmakerSidebar sidebar {
+                     stack: main_stack;
                   }
                }
 
