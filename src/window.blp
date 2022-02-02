@@ -22,6 +22,12 @@ template QuizmakerWindow : Adw.ApplicationWindow {
          }
 
          [end]
+         Gtk.Button play_button {
+            icon-name: "media-playback-start-symbolic";
+            clicked => on_play_button_clicked ();
+         }
+
+         [end]
          Gtk.MenuButton {
             icon-name: "open-menu-symbolic";
             menu-model: action_menu;
@@ -35,8 +41,14 @@ template QuizmakerWindow : Adw.ApplicationWindow {
          start-width: 250;
          vexpand: true;
 
-         Gtk.Stack main_stack {
+         Gtk.Box {
+            orientation: vertical;
+            Gtk.Stack main_stack {
+            }
+
+            Gtk.Picture picture {}
          }
+
 
          [start]
          Panel.Paned {

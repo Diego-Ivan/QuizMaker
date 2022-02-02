@@ -8,7 +8,7 @@
 namespace Quizmaker {
     [GtkTemplate (ui = "/io/github/diegoivanme/quizmaker/sidebar.ui")]
     public class Sidebar : Gtk.Box {
-        [GtkChild] unowned Gtk.ListBox listbox;
+        [GtkChild] public unowned Gtk.ListBox listbox;
         public int item_number { get; private set; default = 0; }
         public Gtk.Stack stack { get; construct; }
 
@@ -60,7 +60,6 @@ namespace Quizmaker {
 
         private void handle_trash_requests (SlideRow row) {
             var row_n = row.page;
-            message (row_n.to_string ());
             Gtk.ListBoxRow? next_row = listbox.get_row_at_index (row_n - 1);
 
             while (next_row != null) {

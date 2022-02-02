@@ -22,6 +22,7 @@ namespace Quizmaker {
 	[GtkTemplate (ui = "/io/github/diegoivanme/quizmaker/window.ui")]
 	public class Window : Adw.ApplicationWindow {
 	    [GtkChild] unowned Sidebar sidebar;
+	    [GtkChild] unowned Gtk.Picture picture;
 
 		public Window (Gtk.Application app) {
 			Object (
@@ -32,23 +33,18 @@ namespace Quizmaker {
 		construct {
 		}
 
-		public Panel.Frame on_grid_create_frame () {
-		    message ("grid signal triggered");
-		    var frame = new Panel.Frame ();
-		    var status = new Adw.StatusPage () {
-		        title = "Frame",
-		        icon_name = "computer-symbolic"
+		[GtkCallback]
+		private void on_play_button_clicked () {
+		    var snap = new Gtk.Snapshot ();
+		    var f_row = sidebar.listbox.get_row_at_y (1);
+
+		    Graphene.Size size = {
+		        300,
+		        300
 		    };
 
-		    var p_widget = new Panel.Widget () {
-		        child = status
-		    };
-
-		    var header = new Panel.FrameTabBar ();
-		    frame.set_header (header);
-		    frame.placeholder = p_widget;
-
-		    return frame;
+		    f_row.snapshot (snap);
+		    picture.paintable = snap.to_paintable (size);
 		}
 	}
 }

@@ -1,10 +1,10 @@
 quizmaker_sources = [
   'main.vala',
-  'Window.vala',
   'Application.vala',
-  'SlideRow.vala',
-  'TrashButton.vala',
-  'Sidebar.vala',
+  'Widgets/TrashButton.vala',
+  'Widgets/SlideRow.vala',
+  'Widgets/Sidebar.vala',
+  'Widgets/Window.vala',
 ]
 
 quizmaker_deps = [
