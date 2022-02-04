@@ -1,6 +1,8 @@
 quizmaker_sources = [
   'main.vala',
   'Application.vala',
+  'Core/Question.vala',
+  'Core/Quiz.vala',
   'Widgets/TrashButton.vala',
   'Widgets/SlideRow.vala',
   'Widgets/Sidebar.vala',
@@ -11,6 +13,7 @@ quizmaker_deps = [
   dependency('gtk4'),
   dependency('libadwaita-1'),
   dependency('libpanel-1'),
+  dependency('libxml-2.0'),
 ]
 
 blueprints_src = [
