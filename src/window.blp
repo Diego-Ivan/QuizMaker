@@ -14,6 +14,14 @@ template QuizmakerWindow : Adw.ApplicationWindow {
       Gtk.HeaderBar {
          show-title-buttons: true;
 
+         [start]
+         Gtk.Button open_button {
+            clicked => open_file_request ();
+            child: Adw.ButtonContent {
+               label: _("Open");
+               icon-name: "document-open-symbolic";
+            };
+         }
 
          [start]
          Panel.DockSwitcher {

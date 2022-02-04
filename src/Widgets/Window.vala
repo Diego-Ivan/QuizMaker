@@ -46,5 +46,38 @@ namespace Quizmaker {
 		    f_row.snapshot (snap);
 		    picture.paintable = snap.to_paintable (size);
 		}
+
+		[GtkCallback]
+		private void open_file_request () {
+		    var filters = new Gtk.FileFilter () {
+                name = "XML"
+            };
+
+            filters.add_suffix ("xml");
+            filters.add_suffix ("quiz");
+
+            var filechooser = new Gtk.FileChooserNative (
+                null,
+                this,
+                OPEN,
+                null,
+                null
+            );
+            filechooser.add_filter (filters);
+
+            filechooser.response.connect ((res) => {
+                if (res == Gtk.ResponseType.ACCEPT) {
+                    var path = filechooser.get_file ().get_path ();
+                    try {
+                        var quiz = new Core.Quiz.from_file (path);
+                    }
+                    catch (Error e) {
+                        critical (e.message);
+                    }
+                }
+            });
+
+            filechooser.show ();
+		}
 	}
 }
