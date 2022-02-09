@@ -11,6 +11,7 @@ namespace Quizmaker {
         [GtkChild] public unowned Gtk.ListBox listbox;
         public int item_number { get; private set; default = 0; }
         public Gtk.Stack stack { get; construct; }
+        public Core.Quiz quiz { get; set; }
 
         private string[] possible_icons = {
             "audio-volume-high-symbolic",

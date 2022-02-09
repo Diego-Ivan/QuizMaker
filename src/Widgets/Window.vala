@@ -22,7 +22,7 @@ namespace Quizmaker {
 	[GtkTemplate (ui = "/io/github/diegoivanme/quizmaker/window.ui")]
 	public class Window : Adw.ApplicationWindow {
 	    [GtkChild] unowned Sidebar sidebar;
-	    [GtkChild] unowned Gtk.Picture picture;
+	    [GtkChild] unowned Adw.WindowTitle title_widget;
 
 		public Window (Gtk.Application app) {
 			Object (
@@ -35,16 +35,6 @@ namespace Quizmaker {
 
 		[GtkCallback]
 		private void on_play_button_clicked () {
-		    var snap = new Gtk.Snapshot ();
-		    var f_row = sidebar.listbox.get_row_at_y (1);
-
-		    Graphene.Size size = {
-		        300,
-		        300
-		    };
-
-		    f_row.snapshot (snap);
-		    picture.paintable = snap.to_paintable (size);
 		}
 
 		[GtkCallback]
@@ -68,8 +58,9 @@ namespace Quizmaker {
             filechooser.response.connect ((res) => {
                 if (res == Gtk.ResponseType.ACCEPT) {
                     var path = filechooser.get_file ().get_path ();
+                    title_widget.subtitle = path;
                     try {
-                        var quiz = new Core.Quiz.from_file (path);
+                        sidebar.quiz = new Core.Quiz.from_file (path);
                     }
                     catch (Error e) {
                         critical (e.message);

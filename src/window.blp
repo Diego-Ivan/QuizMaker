@@ -23,6 +23,10 @@ template QuizmakerWindow : Adw.ApplicationWindow {
             };
          }
 
+         title-widget: Adw.WindowTitle title_widget {
+            title: _("Quiz Maker");
+         };
+
          [start]
          Panel.DockSwitcher {
             dock: main_dock;
@@ -53,8 +57,6 @@ template QuizmakerWindow : Adw.ApplicationWindow {
             orientation: vertical;
             Gtk.Stack main_stack {
             }
-
-            Gtk.Picture picture {}
          }
 
 
