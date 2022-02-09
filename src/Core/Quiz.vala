@@ -14,7 +14,7 @@ namespace Quizmaker.Core {
 
     public class Quiz : Object {
         public Gdk.RGBA color;
-        public Array<Question> questions = new Array<Question> ();
+        public List<Question> questions = new List<Question> ();
         private Xml.Doc* doc;
 
         public Quiz.from_file (string path) throws QuizError {
@@ -32,24 +32,45 @@ namespace Quizmaker.Core {
                 throw new QuizError.NOT_QUIZ_FILE ("File parsed is not a Quizzek file");
             }
 
-            retrieve_questions (root);
+            retrieve_elements (root);
+
+            stdout.printf ("Printing available questions...\n\n");
+
+            foreach (var q in questions) {
+                stdout.printf ("Question: %s\n", q.title);
+                stdout.printf ("Image: %s\n", q.image);
+                stdout.printf ("Options:\n");
+
+                foreach (var option in q.options) {
+                    stdout.printf ("\t%s : ", option);
+                    q.selected_answer = option;
+                    stdout.printf ("Correct: %b\n", q.is_selected_right ());
+                }
+            }
         }
 
         ~Quiz () {
             delete doc;
         }
 
-        private void retrieve_questions (Xml.Node* node) {
+        private void retrieve_elements (Xml.Node* node) {
             assert (node->name == "quiz");
 
             for (Xml.Node* iter = node->children; iter != null; iter = iter->next) {
                 if (iter->type == ELEMENT_NODE) {
-                    if (iter->name == "color") {
-                        retrieve_color (iter);
-                    }
+                    switch (iter->name) {
+                        case "color":
+                            retrieve_color (iter);
+                            break;
 
-                    if (iter->name == "question") {
-                        create_question (iter);
+                        case "question":
+                            var question = new Question.from_xml (iter);
+                            questions.append (question);
+                            break;
+
+                        default:
+                            warning ("Unknown tag at %u : %s", iter->line, iter->name);
+                            break;
                     }
                 }
             }
@@ -60,58 +81,6 @@ namespace Quizmaker.Core {
 
             var x = color.parse (node->get_content ());
             message (x.to_string ());
-        }
-
-        private void create_question (Xml.Node* node) {
-            assert (node->name == "question");
-            var question = new Question ();
-
-            for (Xml.Node* i = node->children; i != null; i = i->next) {
-                if (i->type == ELEMENT_NODE) {
-                    switch (i->name) {
-                        case "title":
-                            question.title = i->get_content ();
-                            break;
-
-                        case "image":
-                            question.image = i->get_content ();
-                            break;
-
-                        case "options":
-                            retrieve_options (i, ref question);
-                            break;
-                    }
-                }
-            }
-            questions.append_val (question);
-
-            string output = "";
-            output += "Question: %s\n".printf (question.title);
-            output += "Image Path: %s\n".printf (question.image);
-            output += "Options: \n";
-
-            foreach (var option in question.options) {
-                output += "\t%s\n".printf (option);
-            }
-
-            stdout.printf (output);
-        }
-
-        private void retrieve_options (Xml.Node* node, ref Question question) {
-            assert (node->name == "options");
-
-            for (Xml.Node* i = node->children; i != null; i = i-> next) {
-                if (i->type == ELEMENT_NODE && i->name == "option") {
-
-                    question.options.append (node->get_content ());
-
-                    string? correct = node->get_prop ("correct");
-
-                    if (correct == "true") {
-                        question.right_answer = node->get_content ();
-                    }
-                }
-            }
         }
     }
 }

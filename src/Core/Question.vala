@@ -11,10 +11,47 @@ namespace Quizmaker.Core {
         public string image { get; set; }
         public List<string> options = new List<string> ();
         public string selected_answer;
-        public string right_answer { private get; set; }
+        private string right_answer { get; set; }
 
         public bool is_selected_right () {
             return selected_answer == right_answer ? true : false;
+        }
+
+        public Question.from_xml (Xml.Node* node) {
+            for (Xml.Node* i = node->children; i != null; i = i->next) {
+                if (i->type == ELEMENT_NODE) {
+                    switch (i->name) {
+                        case "title":
+                            title = i->get_content ();
+                            break;
+
+                        case "image":
+                            image = i->get_content ();
+                            break;
+
+                        case "options":
+                            retrieve_options (i);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void retrieve_options (Xml.Node* node) {
+            assert (node->name == "options");
+
+            for (Xml.Node* i = node->children; i != null; i = i-> next) {
+                if (i->type == ELEMENT_NODE && i->name == "option") {
+
+                    options.append (node->get_content ());
+
+                    string? correct = node->get_prop ("correct");
+
+                    if (correct == "true") {
+                        right_answer = node->get_content ();
+                    }
+                }
+            }
         }
     }
 }
