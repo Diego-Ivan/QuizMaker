@@ -11,7 +11,20 @@ namespace Quizmaker {
         [GtkChild] public unowned Gtk.ListBox listbox;
         public int item_number { get; private set; default = 0; }
         public Gtk.Stack stack { get; construct; }
-        public Core.Quiz quiz { get; set; }
+        private Core.Quiz quiz_;
+        public Core.Quiz quiz {
+            get {
+                return quiz_;
+            }
+            set {
+                quiz_ = value;
+                delete_all_rows.begin (() => {
+                    foreach (var q in value.questions) {
+                        add_slide.begin ();
+                    }
+                });
+            }
+        }
 
         private string[] possible_icons = {
             "audio-volume-high-symbolic",
@@ -70,15 +83,23 @@ namespace Quizmaker {
                 next_row = listbox.get_row_at_index (row_n - 1);
             }
 
-            dispose_row.begin (row);
+            dispose_row (row);
         }
 
-        private async void dispose_row (SlideRow row) {
+        private void dispose_row (SlideRow row) {
             stack.remove (row.widget);
             listbox.remove (row);
             row.dispose ();
 
             item_number--;
+        }
+
+        private async void delete_all_rows () {
+            var n = item_number;
+            for (int i = 0; i <= n; i++) {
+                SlideRow? row = listbox.get_row_at_index (0) as SlideRow;
+                dispose_row (row);
+            }
         }
     }
 }
