@@ -9,7 +9,9 @@ namespace Quizmaker.Core {
     public class Question : Object {
         public string title { get; set; }
         public string image { get; set; }
+        public string description { get; set; }
         public List<string> options = new List<string> ();
+
         public string selected_answer;
         private string right_answer { get; set; }
 
@@ -23,6 +25,10 @@ namespace Quizmaker.Core {
                     switch (i->name) {
                         case "title":
                             title = i->get_content ();
+                            break;
+
+                        case "description":
+                            description = i->get_content ();
                             break;
 
                         case "image":
