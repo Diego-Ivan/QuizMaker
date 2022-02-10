@@ -33,20 +33,6 @@ namespace Quizmaker.Core {
             }
 
             retrieve_elements (root);
-
-            stdout.printf ("Printing available questions...\n\n");
-
-            foreach (var q in questions) {
-                stdout.printf ("Question: %s\n", q.title);
-                stdout.printf ("Image: %s\n", q.image);
-                stdout.printf ("Options:\n");
-
-                foreach (var option in q.options) {
-                    stdout.printf ("\t%s : ", option);
-                    q.selected_answer = option;
-                    stdout.printf ("Correct: %b\n", q.is_selected_right ());
-                }
-            }
         }
 
         ~Quiz () {
