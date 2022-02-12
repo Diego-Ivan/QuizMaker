@@ -58,7 +58,7 @@ namespace Quizmaker {
             filechooser.response.connect ((res) => {
                 if (res == Gtk.ResponseType.ACCEPT) {
                     var path = filechooser.get_file ().get_path ();
-                    title_widget.subtitle = path;
+                    title_widget.subtitle = filechooser.get_file ().get_basename ();
                     try {
                         sidebar.quiz = new Core.Quiz.from_file (path);
                     }
