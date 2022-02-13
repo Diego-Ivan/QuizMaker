@@ -3,6 +3,7 @@ quizmaker_sources = [
   'Application.vala',
   'Core/Question.vala',
   'Core/Quiz.vala',
+  'Widgets/QuestionPage.vala',
   'Widgets/TrashButton.vala',
   'Widgets/SlideRow.vala',
   'Widgets/Sidebar.vala',
@@ -19,6 +20,7 @@ quizmaker_deps = [
 blueprints_src = [
     'window.blp',
     'sidebar.blp',
+    'questionpage.blp',
 ]
 blueprints_ui = []
 blueprints_vala = []

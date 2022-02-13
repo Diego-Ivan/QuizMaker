@@ -20,28 +20,13 @@ namespace Quizmaker {
                 quiz_ = value;
                 delete_all_rows.begin (() => {
                     foreach (var q in value.questions) {
-                        add_slide.begin ();
+                        add_slide.begin (q);
                     }
                 });
             }
         }
 
-        private string[] possible_icons = {
-            "audio-volume-high-symbolic",
-            "mail-unread-symbolic",
-            "zoom-in-symbolic",
-            "zoom-original-symbolic",
-            "alarm-symbolic",
-            "dialog-error-symbolic",
-            "user-trash-symbolic",
-            "security-low-symbolic",
-            "dialog-warning-symbolic",
-            "display-projector-symbolic"
-        };
-
         construct {
-            add_slide.begin ();
-
             listbox.row_selected.connect ((row) => {
                 var r = row as SlideRow;
                 stack.set_visible_child (r.widget);
@@ -53,14 +38,10 @@ namespace Quizmaker {
             add_slide.begin ();
         }
 
-        private async void add_slide () {
+        private async void add_slide (Core.Question? q = new Core.Question ()) {
             item_number++;
 
-            var widget = new Adw.StatusPage () {
-                title = @"This is page $item_number",
-                icon_name = possible_icons[Random.int_range (0, possible_icons.length)]
-            };
-
+            var widget = new QuestionPage (q);
             var child = new SlideRow () {
                 page = item_number,
                 widget = widget

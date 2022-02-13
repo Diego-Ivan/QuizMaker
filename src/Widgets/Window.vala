@@ -24,6 +24,25 @@ namespace Quizmaker {
 	    [GtkChild] unowned Sidebar sidebar;
 	    [GtkChild] unowned Adw.WindowTitle title_widget;
 
+        private Core.Quiz _quiz;
+        private Gdk.RGBA _color;
+        private Gdk.RGBA color {
+            get {
+                return _color;
+            }
+            set {
+            }
+        }
+	    public Core.Quiz quiz {
+	        get {
+	            return _quiz;
+	        }
+	        set {
+	            _quiz = value;
+	            color = value.color;
+	        }
+	    }
+
 		public Window (Gtk.Application app) {
 			Object (
 			    application: app
@@ -60,7 +79,8 @@ namespace Quizmaker {
                     var path = filechooser.get_file ().get_path ();
                     title_widget.subtitle = filechooser.get_file ().get_basename ();
                     try {
-                        sidebar.quiz = new Core.Quiz.from_file (path);
+                        quiz = new Core.Quiz.from_file (path);
+                        sidebar.quiz = quiz;
                     }
                     catch (Error e) {
                         critical (e.message);
