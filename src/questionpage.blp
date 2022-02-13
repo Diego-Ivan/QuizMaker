@@ -1,0 +1,23 @@
+using Gtk 4.0;
+using Adw 1;
+
+template QuizmakerQuestionPage : Gtk.Box {
+   orientation: vertical;
+   hexpand: true;
+   halign: center;
+
+   Gtk.Label title_label {
+      justify: center;
+      xalign: 0;
+   }
+
+   Gtk.Label image {
+      justify: center;
+      xalign: 0;
+   }
+
+   Gtk.Box options_box {
+      spacing: 6;
+      orientation: vertical;
+   }
+}
