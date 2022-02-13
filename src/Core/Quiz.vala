@@ -13,7 +13,10 @@ namespace Quizmaker.Core {
     }
 
     public class Quiz : Object {
-        public Gdk.RGBA color;
+        public string title { get; set; }
+        public string description { get; set; }
+        public Gdk.RGBA color { get; set; }
+
         public List<Question> questions = new List<Question> ();
         private Xml.Doc* doc;
 
@@ -45,6 +48,14 @@ namespace Quizmaker.Core {
             for (Xml.Node* iter = node->children; iter != null; iter = iter->next) {
                 if (iter->type == ELEMENT_NODE) {
                     switch (iter->name) {
+                        case "title":
+                            title = iter->content;
+                            break;
+
+                        case "description":
+                            description = iter->content;
+                            break;
+
                         case "color":
                             retrieve_color (iter);
                             break;
