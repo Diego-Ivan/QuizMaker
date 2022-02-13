@@ -42,6 +42,10 @@ namespace Quizmaker.Core {
             delete doc;
         }
 
+        construct {
+            color = { 0, 0, 0, 0 };
+        }
+
         private void retrieve_elements (Xml.Node* node) {
             assert (node->name == "quiz");
 
@@ -76,8 +80,12 @@ namespace Quizmaker.Core {
         private void retrieve_color (Xml.Node* node) {
             assert (node->name == "color");
 
-            var x = color.parse (node->get_content ());
-            message (x.to_string ());
+            for (Xml.Node* i = node->children; i != null; i = i->next) {
+                if (i->type == TEXT_NODE) {
+                    message (i->get_content ());
+                    color.parse ("red");
+                }
+            }
         }
     }
 }
