@@ -23,23 +23,16 @@ namespace Quizmaker {
 	public class Window : Adw.ApplicationWindow {
 	    [GtkChild] unowned Sidebar sidebar;
 	    [GtkChild] unowned Adw.WindowTitle title_widget;
+	    [GtkChild] unowned ColorButton color_button;
 
         private Core.Quiz _quiz;
-        private Gdk.RGBA _color;
-        private Gdk.RGBA color {
-            get {
-                return _color;
-            }
-            set {
-            }
-        }
 	    public Core.Quiz quiz {
 	        get {
 	            return _quiz;
 	        }
 	        set {
 	            _quiz = value;
-	            color = value.color;
+	            color_button.color = _quiz.color;
 	        }
 	    }
 

@@ -3,6 +3,7 @@ quizmaker_sources = [
   'Application.vala',
   'Core/Question.vala',
   'Core/Quiz.vala',
+  'Widgets/ColorButton.vala',
   'Widgets/QuestionPage.vala',
   'Widgets/TrashButton.vala',
   'Widgets/SlideRow.vala',

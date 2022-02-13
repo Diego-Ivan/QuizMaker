@@ -18,6 +18,7 @@ namespace Quizmaker {
             }
             set {
                 _color = value;
+                visible = true;
                 message ("Setting Color to %s", value.to_string ());
                 css_provider.load_from_data ((uint8[])
                     "* { background-color: %s; }".printf (value.to_string ())
@@ -34,6 +35,7 @@ namespace Quizmaker {
                 Gtk.STYLE_PROVIDER_PRIORITY_USER
             );
 
+            visible = false;
             width_request = WIDTH;
             height_request = HEIGHT;
             valign = CENTER;
