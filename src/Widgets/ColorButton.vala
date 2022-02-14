@@ -50,27 +50,25 @@ namespace Quizmaker {
                     valign = CENTER
                 };
 
-                var headerbar = new Gtk.HeaderBar ();
-                headerbar.add_css_class ("flat");
+                var dialog = new Gtk.ColorChooserDialog (
+                    _("Pick a color"),
+                    get_native () as Gtk.Window
+                );
 
-                var window = new Gtk.Window () {
-                    default_height = 340,
-                    default_width = 530,
-                    modal = true,
-                    title = _("Pick a color"),
-                    titlebar = headerbar,
-                    transient_for = get_native () as Gtk.Window,
-                    child = chooser,
-                };
-                chooser.color_activated.connect ((c) => {
+                dialog.modal = true;
+
+                dialog.color_activated.connect ((c) => {
                     color = c;
                 });
 
-                window.present ();
-                window.close_request.connect (() => {
-                    color = chooser.get_rgba ();
-                    return false;
+                dialog.response.connect ((res) => {
+                    if (res == Gtk.ResponseType.OK) {
+                        color = dialog.get_rgba ();
+                    }
+                    dialog.close ();
                 });
+
+                dialog.show ();
             });
 
             add_controller (controller);

@@ -42,13 +42,6 @@ namespace Quizmaker {
 			);
 		}
 
-		construct {
-		}
-
-		[GtkCallback]
-		private void on_play_button_clicked () {
-		}
-
 		[GtkCallback]
 		private void open_file_request () {
 		    var filters = new Gtk.FileFilter () {
