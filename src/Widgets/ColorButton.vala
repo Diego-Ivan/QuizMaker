@@ -12,22 +12,24 @@ namespace Quizmaker {
         private const int HEIGHT = 24;
 
         private Gdk.RGBA _color;
-        public Gdk.RGBA color {
+        public Gdk.RGBA rgba {
             get {
                 return _color;
             }
             set {
+                value.alpha = 1;
                 _color = value;
+
                 visible = true;
                 message ("Setting Color to %s", value.to_string ());
                 css_provider.load_from_data ((uint8[])
                     "* { background-color: %s; }".printf (value.to_string ())
                 );
-                color_selected (_color);
+                color_activated (_color);
             }
         }
 
-        public signal void color_selected (Gdk.RGBA c);
+        public signal void color_activated (Gdk.RGBA c);
 
         construct {
             get_style_context ().add_provider (
@@ -58,12 +60,12 @@ namespace Quizmaker {
                 dialog.modal = true;
 
                 dialog.color_activated.connect ((c) => {
-                    color = c;
+                    rgba = c;
                 });
 
                 dialog.response.connect ((res) => {
                     if (res == Gtk.ResponseType.OK) {
-                        color = dialog.get_rgba ();
+                        rgba = dialog.get_rgba ();
                     }
                     dialog.close ();
                 });
@@ -72,6 +74,5 @@ namespace Quizmaker {
             });
 
             add_controller (controller);
-        }
-    }
+        }   }
 }
