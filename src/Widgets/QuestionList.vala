@@ -1,4 +1,4 @@
-/* Sidebar.vala
+/* QuestionList.vala
  *
  * Copyright 2022 Diego Iván <diegoivan.mae@gmail.com>
  *
