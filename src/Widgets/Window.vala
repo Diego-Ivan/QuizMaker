@@ -32,7 +32,7 @@ namespace Quizmaker {
 	        }
 	        set {
 	            _quiz = value;
-	            color_button.color = _quiz.color;
+	            color_button.rgba = value.color;
 	        }
 	    }
 

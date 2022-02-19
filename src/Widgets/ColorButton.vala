@@ -74,5 +74,6 @@ namespace Quizmaker {
             });
 
             add_controller (controller);
-        }   }
+        }
+    }
 }
