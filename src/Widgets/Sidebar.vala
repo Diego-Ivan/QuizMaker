@@ -10,7 +10,6 @@ namespace Quizmaker {
     public class Sidebar : Gtk.Box {
         [GtkChild] public unowned Gtk.ListBox listbox;
         public int item_number { get; private set; default = 0; }
-        public Gtk.Stack stack { get; construct; }
         private Core.Quiz quiz_;
         public Core.Quiz quiz {
             get {
@@ -29,7 +28,6 @@ namespace Quizmaker {
         construct {
             listbox.row_selected.connect ((row) => {
                 var r = row as SlideRow;
-                stack.set_visible_child (r.widget);
             });
         }
 
@@ -50,7 +48,6 @@ namespace Quizmaker {
             child.trash_request.connect (handle_trash_requests);
 
             listbox.append (child);
-            stack.add_named (widget, @"$item_number");
         }
 
         private void handle_trash_requests (SlideRow row) {
@@ -68,7 +65,6 @@ namespace Quizmaker {
         }
 
         private void dispose_row (SlideRow row) {
-            stack.remove (row.widget);
             listbox.remove (row);
             row.dispose ();
 

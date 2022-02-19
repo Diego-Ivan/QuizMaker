@@ -2,22 +2,30 @@ using Gtk 4.0;
 using Adw 1;
 
 template QuizmakerSidebar : Gtk.Box {
-   styles ["sidebar"]
    orientation: vertical;
 
-   Gtk.ScrolledWindow {
-      propagate-natural-width: true;
-      propagate-natural-height: true;
-      Gtk.ListBox listbox {}
-   }
-
-   Gtk.Button {
-      styles ["add_button"]
+   Gtk.Overlay {
       vexpand: true;
-      valign: end;
-      hexpand: true;
-      icon-name: "list-add-symbolic";
+      Gtk.ScrolledWindow {
+         propagate-natural-width: true;
+         propagate-natural-height: true;
+         Gtk.ListBox listbox {
+            styles ["boxed-list"]
+            valign: start;
+         }
+      }
 
-      clicked => on_add_button_clicked();
+      [overlay]
+      Gtk.Button add_button {
+         styles ["suggested-action", "add-button"]
+         vexpand: true;
+         hexpand: true;
+         valign: end;
+         halign: end;
+         icon-name: "list-add-symbolic";
+         margin-bottom: 12;
+         margin-end: 12;
+         clicked => on_add_button_clicked();
+      }
    }
 }
