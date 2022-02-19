@@ -53,15 +53,15 @@ namespace Quizmaker.Core {
                 if (iter->type == ELEMENT_NODE) {
                     switch (iter->name) {
                         case "title":
-                            title = iter->content;
+                            title = get_node_content (iter, "title");
                             break;
 
                         case "description":
-                            description = iter->content;
+                            description = get_node_content (iter, "description");
                             break;
 
                         case "color":
-                            retrieve_color (iter);
+                            color.parse (get_node_content (iter, "color"));
                             break;
 
                         case "question":
@@ -77,14 +77,15 @@ namespace Quizmaker.Core {
             }
         }
 
-        private void retrieve_color (Xml.Node* node) {
-            assert (node->name == "color");
-
+        private string? get_node_content (Xml.Node* node, string node_name) {
+            assert (node->name == node_name);
             for (Xml.Node* i = node->children; i != null; i = i->next) {
                 if (i->type == TEXT_NODE) {
-                    color.parse (i->get_content ());
+                    return i->get_content ();
                 }
             }
+
+            return null;
         }
     }
 }
