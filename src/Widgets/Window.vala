@@ -25,7 +25,7 @@ namespace Quizmaker {
 	    [GtkChild] unowned ColorButton color_button;
 	    [GtkChild] unowned Gtk.Label title_label;
 	    [GtkChild] unowned Gtk.Label description_label;
-	    [GtkChild] unowned Sidebar bar;
+	    [GtkChild] unowned QuestionList list;
 
         private Core.Quiz _quiz;
 	    public Core.Quiz quiz {
@@ -37,7 +37,7 @@ namespace Quizmaker {
 	            color_button.rgba = value.color;
 	            title_label.label = value.title;
 	            description_label.label = value.description;
-	            bar.quiz = value;
+	            list.quiz = value;
 	        }
 	    }
 

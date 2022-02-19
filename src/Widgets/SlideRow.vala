@@ -6,7 +6,7 @@
  */
 
 namespace Quizmaker {
-    public class SlideRow : Gtk.ListBoxRow {
+    public class QuestionRow : Gtk.ListBoxRow {
         public Gtk.Image image { get; set; }
         public Gtk.Widget widget { get; set; }
         private Gtk.Label number_label;
@@ -21,7 +21,7 @@ namespace Quizmaker {
             }
         }
 
-        public signal void trash_request (SlideRow r);
+        public signal void trash_request (QuestionRow r);
 
         private string[] possible_icons = {
             "audio-volume-high-symbolic",
