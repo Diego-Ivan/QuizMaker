@@ -21,9 +21,11 @@
 namespace Quizmaker {
 	[GtkTemplate (ui = "/io/github/diegoivanme/quizmaker/window.ui")]
 	public class Window : Adw.ApplicationWindow {
-	    [GtkChild] unowned Sidebar sidebar;
 	    [GtkChild] unowned Adw.WindowTitle title_widget;
 	    [GtkChild] unowned ColorButton color_button;
+	    [GtkChild] unowned Gtk.Label title_label;
+	    [GtkChild] unowned Gtk.Label description_label;
+	    [GtkChild] unowned Sidebar bar;
 
         private Core.Quiz _quiz;
 	    public Core.Quiz quiz {
@@ -33,6 +35,9 @@ namespace Quizmaker {
 	        set {
 	            _quiz = value;
 	            color_button.rgba = value.color;
+	            title_label.label = value.title;
+	            description_label.label = value.description;
+	            bar.quiz = value;
 	        }
 	    }
 
@@ -66,7 +71,6 @@ namespace Quizmaker {
                     title_widget.subtitle = filechooser.get_file ().get_basename ();
                     try {
                         quiz = new Core.Quiz.from_file (path);
-                        sidebar.quiz = quiz;
                     }
                     catch (Error e) {
                         critical (e.message);

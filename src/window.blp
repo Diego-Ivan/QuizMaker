@@ -1,6 +1,5 @@
 using Gtk 4.0;
 using Adw 1;
-using Panel 1;
 
 template QuizmakerWindow : Adw.ApplicationWindow {
    default-width: 900;
@@ -27,12 +26,6 @@ template QuizmakerWindow : Adw.ApplicationWindow {
             title: _("Quiz Maker");
          };
 
-         [start]
-         Panel.DockSwitcher {
-            dock: main_dock;
-            position: start;
-         }
-
          [end]
          .QuizmakerColorButton color_button {
             css_name: "qcolorbutton";
@@ -45,44 +38,24 @@ template QuizmakerWindow : Adw.ApplicationWindow {
          }
       }
 
-      Panel.Dock main_dock {
-         reveal-start: true;
-         reveal-bottom: false;
-         reveal-end: false;
-         start-width: 250;
-         vexpand: true;
+      Adw.Clamp {
+         Gtk.Overlay {
+            vexpand: true;
+            Gtk.Box {
+               orientation: vertical;
+               spacing: 6;
 
-         Gtk.Box {
-            orientation: vertical;
-            Gtk.Stack main_stack {
-            }
-         }
-
-
-         [start]
-         Panel.Paned {
-            orientation: vertical;
-            Panel.Frame {
-               Panel.Widget {
-                  title: "Overview";
-                  can-maximize: true;
-                  icon-name: "view-list-symbolic";
-
-                  .QuizmakerSidebar sidebar {
-                     stack: main_stack;
-                  }
+               Gtk.Label title_label {
+                  styles ["large-title"]
+                  wrap: true;
                }
 
-               Panel.Widget {
-                  title: "Todo List";
-                  can-maximize: true;
-                  icon-name: "emblem-ok-symbolic";
-                  Adw.StatusPage {
-                     styles ["compact"]
-                     title: "No Pending Tasks";
-                     icon-name: "emblem-ok-symbolic";
-                  }
+               Gtk.Label description_label {
+                  styles ["dim-label"]
+                  wrap: true;
                }
+
+               .QuizmakerSidebar bar {}
             }
          }
       }
