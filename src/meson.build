@@ -9,7 +9,6 @@ quizmaker_sources = [
   'Widgets/QuestionList.vala',
   'Widgets/QuestionPage.vala',
   'Widgets/QuestionRow.vala',
-  'Widgets/TrashButton.vala',
   'Widgets/Window.vala',
 ]
 
@@ -23,6 +22,7 @@ blueprints_src = [
     'window.blp',
     'sidebar.blp',
     'questionpage.blp',
+    'questionrow.blp',
 ]
 blueprints_ui = []
 blueprints_vala = []
