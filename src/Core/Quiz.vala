@@ -82,8 +82,7 @@ namespace Quizmaker.Core {
 
             for (Xml.Node* i = node->children; i != null; i = i->next) {
                 if (i->type == TEXT_NODE) {
-                    message (i->get_content ());
-                    color.parse ("red");
+                    color.parse (i->get_content ());
                 }
             }
         }
