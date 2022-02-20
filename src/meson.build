@@ -6,6 +6,9 @@ quizmaker_sources = [
   'Core/Quiz.vala',
 
   'Widgets/ColorButton.vala',
+  'Widgets/EditWindow.vala',
+  'Widgets/OptionsList.vala',
+  'Widgets/OptionRow.vala',
   'Widgets/QuestionList.vala',
   'Widgets/QuestionPage.vala',
   'Widgets/QuestionRow.vala',
@@ -20,6 +23,7 @@ quizmaker_deps = [
 
 blueprints_src = [
     'window.blp',
+    'optionrow.blp',
     'sidebar.blp',
     'questionpage.blp',
     'questionrow.blp',

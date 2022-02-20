@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/github/diegoivanme/quizmaker">
-    <file preprocess="xml-stripblanks">window.ui</file>
+    <file preprocess="xml-stripblanks">editwindow.ui</file>
+    <file preprocess="xml-stripblanks">optionrow.ui</file>
     <file preprocess="xml-stripblanks">sidebar.ui</file>
     <file preprocess="xml-stripblanks">questionpage.ui</file>
+    <file preprocess="xml-stripblanks">questionrow.ui</file>
+    <file preprocess="xml-stripblanks">window.ui</file>
 
     <file>style.css</file>
   </gresource>

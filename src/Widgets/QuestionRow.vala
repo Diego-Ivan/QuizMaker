@@ -6,68 +6,60 @@
  */
 
 namespace Quizmaker {
+    [GtkTemplate (ui = "/io/github/diegoivanme/quizmaker/questionrow.ui")]
     public class QuestionRow : Gtk.ListBoxRow {
-        public Gtk.Image image { get; set; }
-        public Gtk.Widget widget { get; set; }
-        private Gtk.Label number_label;
-        private int _page;
-        public int page {
+        /* Fields */
+        [GtkChild] unowned Gtk.EditableLabel title_label;
+        [GtkChild] unowned Gtk.Label options_label;
+
+        /* Properties */
+        public Core.Question _question;
+        public Core.Question question {
             get {
-                return _page;
+                return _question;
             }
             set {
-                _page = value;
-                number_label.label = value.to_string ();
+                _question = value;
+                title_label.text = value.title;
+                options_label.label = _("%u options".printf (value.options.length ()));
             }
         }
 
+        /* Signals */
         public signal void trash_request (QuestionRow r);
 
-        private string[] possible_icons = {
-            "audio-volume-high-symbolic",
-            "mail-unread-symbolic",
-            "zoom-in-symbolic",
-            "zoom-original-symbolic",
-            "alarm-symbolic",
-            "dialog-error-symbolic",
-            "user-trash-symbolic",
-            "security-low-symbolic",
-            "dialog-warning-symbolic",
-            "display-projector-symbolic"
-        };
-
         construct {
-            margin_top = 3;
-            margin_bottom = 3;
-            margin_start = 3;
-            margin_end = 3;
+            selectable = false;
 
-            number_label = new Gtk.Label ("");
-            image = new Gtk.Image () {
-                icon_size = LARGE,
-                hexpand = true,
-                halign = CENTER
+            /*
+             * Trick to get the label from a GtkEditableLabel so we're able to
+             * wrap it. Useful for large questions. I hope I can find a better
+             * way of doing this, other than implementing the widget myself.
+             */
+            var label = title_label.get_first_child ().get_first_child () as Gtk.Label;
+            label.wrap = true;
+        }
+
+        [GtkCallback]
+        private void on_trash_button_clicked () {
+            trash_request (this);
+        }
+
+        [GtkCallback]
+        public void on_edit_mode_activated () {
+            var dialog = new EditWindow (question) {
+                transient_for = get_native () as Gtk.Window
             };
 
-            image.icon_name = possible_icons[Random.int_range (0, possible_icons.length)];
-
-            var trash_button = new TrashButton ();
-            trash_button.clicked.connect (() => {
-                trash_request (this);
+            dialog.response.connect ((res) => {
+                if (res == Gtk.ResponseType.OK) {
+                    question.options = dialog.get_options ();
+                    options_label.label = _("%u options".printf (question.options.length ()));
+                }
+                dialog.close ();
             });
 
-            var c_box = new Gtk.CenterBox () {
-                margin_top = 6,
-                margin_bottom = 6,
-            };
-            c_box.set_start_widget (trash_button);
-
-            var vbox = new Gtk.Box (VERTICAL, 6);
-            vbox.append (image);
-            vbox.append (number_label);
-
-            c_box.set_center_widget (vbox);
-            child = c_box;
+            dialog.show ();
         }
     }
 }

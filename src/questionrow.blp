@@ -1,0 +1,46 @@
+using Gtk 4.0;
+using Adw 1;
+
+template QuizmakerQuestionRow : Gtk.ListBoxRow {
+   child: Gtk.Box {
+      orientation: horizontal;
+      hexpand: true;
+      spacing: 12;
+      margin-top: 12;
+      margin-bottom: 12;
+      margin-start: 6;
+      margin-end: 6;
+
+      Gtk.Button trash_button {
+         styles ["flat"]
+         icon-name: "edit-delete-symbolic";
+         valign: center;
+         clicked => on_trash_button_clicked ();
+      }
+
+      Gtk.Box {
+         orientation: vertical;
+         spacing: 3;
+
+         Gtk.EditableLabel title_label {
+            styles ["title-4"]
+            hexpand: true;
+            xalign: 0;
+         }
+
+         Gtk.Label options_label {
+            styles ["dim-label"]
+            wrap: true;
+            hexpand: true;
+            xalign: 0;
+         }
+      }
+
+      Gtk.Button edit_button {
+         styles ["flat"]
+         icon-name: "document-edit-symbolic";
+         valign: center;
+         clicked => on_edit_mode_activated ();
+      }
+   };
+}

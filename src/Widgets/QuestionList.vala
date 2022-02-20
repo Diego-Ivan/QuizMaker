@@ -39,10 +39,8 @@ namespace Quizmaker {
         private async void add_slide (Core.Question? q = new Core.Question ()) {
             item_number++;
 
-            var widget = new QuestionPage (q);
             var child = new QuestionRow () {
-                page = item_number,
-                widget = widget
+                question = q
             };
 
             child.trash_request.connect (handle_trash_requests);
@@ -51,16 +49,6 @@ namespace Quizmaker {
         }
 
         private void handle_trash_requests (QuestionRow row) {
-            var row_n = row.page;
-            Gtk.ListBoxRow? next_row = listbox.get_row_at_index (row_n - 1);
-
-            while (next_row != null) {
-                var r = next_row as QuestionRow;
-                r.page = row_n - 1;
-                row_n++;
-                next_row = listbox.get_row_at_index (row_n - 1);
-            }
-
             dispose_row (row);
         }
 
