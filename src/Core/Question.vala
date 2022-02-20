@@ -7,8 +7,8 @@
 
 namespace Quizmaker.Core {
     public class Question : Object {
-        public string title { get; set; }
-        public string image { get; set; }
+        public string title { get; set; default = ""; }
+        public string image { get; set; default = ""; }
         public List<string> options = new List<string> ();
 
         public string selected_answer;
