@@ -38,6 +38,10 @@ namespace Quizmaker {
              */
             var label = title_label.get_first_child ().get_first_child () as Gtk.Label;
             label.wrap = true;
+
+            title_label.changed.connect (() => {
+                question.title = title_label.text;
+            });
         }
 
         [GtkCallback]

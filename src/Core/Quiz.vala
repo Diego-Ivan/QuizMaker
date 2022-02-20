@@ -15,12 +15,14 @@ namespace Quizmaker.Core {
     public class Quiz : Object {
         public string title { get; set; }
         public string description { get; set; }
+        public string file_location { get; set; }
         public Gdk.RGBA color { get; set; }
 
         public List<Question> questions = new List<Question> ();
         private Xml.Doc* doc;
 
         public Quiz.from_file (string path) throws QuizError {
+            file_location = path;
             doc = Xml.Parser.parse_file (path);
             if (doc == null) {
                 throw new QuizError.FILE_NOT_FOUND ("File %s is not accessible".printf (path));
@@ -44,6 +46,10 @@ namespace Quizmaker.Core {
 
         construct {
             color = { 0, 0, 0, 0 };
+        }
+
+        public void save () {
+            doc->save_format_file (file_location, 1);
         }
 
         private void retrieve_elements (Xml.Node* node) {

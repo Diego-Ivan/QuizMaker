@@ -36,6 +36,8 @@ namespace Quizmaker {
         construct {
             use_header_bar = (int) true;
             destroy_with_parent = true;
+
+            title = "";
         }
 
         public GLib.List get_options () {

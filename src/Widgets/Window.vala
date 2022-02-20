@@ -80,5 +80,10 @@ namespace Quizmaker {
 
             filechooser.show ();
 		}
+
+		[GtkCallback]
+		private void on_save_button_clicked () {
+		    quiz.save ();
+		}
 	}
 }

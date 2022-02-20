@@ -32,6 +32,12 @@ template QuizmakerWindow : Adw.ApplicationWindow {
          }
 
          [end]
+         Gtk.Button save_button {
+            label: _("Save file");
+            clicked => on_save_button_clicked ();
+         }
+
+         [end]
          Gtk.MenuButton {
             icon-name: "open-menu-symbolic";
             menu-model: action_menu;
