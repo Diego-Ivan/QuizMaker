@@ -9,7 +9,25 @@ namespace Quizmaker {
     public class OptionsList : Adw.Bin {
         public Adw.PreferencesRow new_option_row { get; protected set; }
         public Gtk.CheckButton group { get; set; }
+
+        public Core.Options _options;
+        public Core.Options options {
+            get {
+                return _options;
+            }
+            set {
+                _options = value;
+
+                for (int i = 0; i < value.length; i++) {
+                    add_new_option (value.get_option_at (i));
+                }
+            }
+        }
         public int length { get; set; default = 0; }
+
+        static construct {
+            typeof (OptionRow).ensure ();
+        }
 
         construct {
             var listbox = new Gtk.ListBox () {
@@ -35,7 +53,7 @@ namespace Quizmaker {
             });
         }
 
-        public void add_new_option (string? str = "") {
+        public void add_new_option (Core.Option option = options.add_new_option ()) {
             var listbox = child as Gtk.ListBox;
             if (new_option_row == null) {
                 new_option_row = new Adw.PreferencesRow () {
@@ -49,13 +67,12 @@ namespace Quizmaker {
                 listbox.remove (new_option_row);
             }
 
-            var row = new OptionRow (str);
+            var row = new OptionRow (option);
             if (length == 0) {
                 group = row.checkbutton;
             }
             else {
                 row.checkbutton.group = group;
-                message ("not in group");
             }
             length++;
             row.trash_request.connect (on_trash_request);
@@ -64,36 +81,9 @@ namespace Quizmaker {
             listbox.append (new_option_row);
         }
 
-        public GLib.List get_options () {
-            var l = new GLib.List <string> ();
-            int index = 0;
-
-            var list = child as Gtk.ListBox;
-            Gtk.ListBoxRow? current_row;
-            current_row = list.get_row_at_index (index);
-
-            while (current_row != null) {
-                if (current_row == new_option_row)
-                    break;
-
-                var r = current_row as OptionRow;
-                string c = r.content;
-
-                if (c == "") {
-                    warning ("Row %i is empty", index);
-                }
-                else {
-                    l.append (c);
-                }
-
-                index++;
-                current_row = list.get_row_at_index (index); // go to the next row
-            }
-
-            return l;
-        }
-
         private void on_trash_request (OptionRow o) {
+            options.delete_option (o.option);
+
             var listbox = child as Gtk.ListBox;
             listbox.remove (o);
             o.dispose ();

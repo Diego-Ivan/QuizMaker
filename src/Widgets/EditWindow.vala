@@ -20,10 +20,7 @@ namespace Quizmaker {
                 _question = value;
                 title_label.label = value.title;
 
-                for (int i = 0; i < value.options.length (); i++) {
-                    string content = value.options.nth_data (i);
-                    options_list.add_new_option (content);
-                }
+                options_list.options = value.option_list;
             }
         }
 
@@ -38,10 +35,6 @@ namespace Quizmaker {
             destroy_with_parent = true;
 
             title = "";
-        }
-
-        public GLib.List get_options () {
-            return options_list.get_options ();
         }
     }
 }

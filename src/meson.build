@@ -2,6 +2,8 @@ quizmaker_sources = [
   'main.vala',
   'Application.vala',
 
+  'Core/Option.vala',
+  'Core/Options.vala',
   'Core/Question.vala',
   'Core/Quiz.vala',
 
@@ -10,7 +12,6 @@ quizmaker_sources = [
   'Widgets/OptionsList.vala',
   'Widgets/OptionRow.vala',
   'Widgets/QuestionList.vala',
-  'Widgets/QuestionPage.vala',
   'Widgets/QuestionRow.vala',
   'Widgets/Window.vala',
 ]
@@ -25,7 +26,6 @@ blueprints_src = [
     'window.blp',
     'optionrow.blp',
     'sidebar.blp',
-    'questionpage.blp',
     'questionrow.blp',
 ]
 blueprints_ui = []

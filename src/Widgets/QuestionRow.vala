@@ -21,7 +21,7 @@ namespace Quizmaker {
             set {
                 _question = value;
                 title_label.text = value.title;
-                options_label.label = _("%u options".printf (value.options.length ()));
+                options_label.label = _("%u options".printf (value.n_options));
             }
         }
 
@@ -57,8 +57,7 @@ namespace Quizmaker {
 
             dialog.response.connect ((res) => {
                 if (res == Gtk.ResponseType.OK) {
-                    question.options = dialog.get_options ();
-                    options_label.label = _("%u options".printf (question.options.length ()));
+                    options_label.label = _("%u options".printf (question.n_options));
                 }
                 dialog.close ();
             });

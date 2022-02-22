@@ -11,21 +11,27 @@ namespace Quizmaker {
         [GtkChild] public unowned Gtk.CheckButton checkbutton;
         [GtkChild] unowned Gtk.EditableLabel name_label;
 
-        public string content {
+        private Core.Option _option;
+        public Core.Option option {
             get {
-                return name_label.text;
+                return _option;
             }
             set construct {
-                name_label.text = value;
+                _option = value;
+                name_label.text = value.name;
             }
         }
 
         public signal void trash_request (OptionRow o);
 
-        public OptionRow (string str) {
+        public OptionRow (Core.Option option_) {
             Object (
-                content: str
+                option: option_
             );
+
+            name_label.changed.connect (() => {
+                option.name = name_label.text;
+            });
         }
 
         [GtkCallback]
