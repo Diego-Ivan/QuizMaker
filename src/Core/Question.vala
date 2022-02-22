@@ -9,10 +9,16 @@ namespace Quizmaker.Core {
     public class Question : Object {
         public string title { get; set; default = ""; }
         public string image { get; set; default = ""; }
-        public List<string> options = new List<string> ();
+        public Options option_list { get; set; }
 
         public string selected_answer;
         public string right_answer { get; set; }
+
+        public uint n_options {
+            get {
+                return option_list.length;
+            }
+        }
 
         public bool is_selected_right () {
             return selected_answer == right_answer ? true : false;
@@ -31,38 +37,11 @@ namespace Quizmaker.Core {
                             break;
 
                         case "options":
-                            retrieve_options (i);
+                            option_list = new Options.from_xml (i);
                             break;
                     }
                 }
             }
-        }
-
-        private void retrieve_options (Xml.Node* node) {
-            assert (node->name == "options");
-
-            for (Xml.Node* i = node->children; i != null; i = i->next) {
-                if (i->type == ELEMENT_NODE) {
-                    var option = i->get_content ();
-                    options.append (option);
-                }
-
-                string? correct = i->get_prop ("correct");
-                if ((correct != null) && (correct == "true")) {
-                    message ("Correct Answwer found for question: %s", title);
-                    right_answer = get_option_content (i);
-                }
-            }
-        }
-
-        private string? get_option_content (Xml.Node* node) {
-            assert (node->name == "option");
-            for (Xml.Node* i = node->children; i != null; i = i->next) {
-                if (i->type == TEXT_NODE) {
-                    return i->get_content ();
-                }
-            }
-            return null;
         }
     }
 }
