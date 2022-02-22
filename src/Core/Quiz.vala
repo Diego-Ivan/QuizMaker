@@ -16,7 +16,18 @@ namespace Quizmaker.Core {
         public string title { get; set; }
         public string description { get; set; }
         public string file_location { get; set; }
-        public Gdk.RGBA color { get; set; }
+
+        private Xml.Node* color_node;
+        private Gdk.RGBA _color;
+        public Gdk.RGBA color {
+            get {
+                return _color;
+            }
+            set {
+                _color = value;
+                color_node->set_content (value.to_string ());
+            }
+        }
 
         public List<Question> questions = new List<Question> ();
         private Xml.Doc* doc;
@@ -67,6 +78,7 @@ namespace Quizmaker.Core {
                             break;
 
                         case "color":
+                            color_node = iter;
                             color.parse (get_node_content (iter, "color"));
                             break;
 

@@ -47,6 +47,12 @@ namespace Quizmaker {
 			);
 		}
 
+		construct {
+		    color_button.color_activated.connect ((c) => {
+		        quiz.color = c;
+		    });
+		}
+
 		[GtkCallback]
 		private void open_file_request () {
 		    var filters = new Gtk.FileFilter () {
