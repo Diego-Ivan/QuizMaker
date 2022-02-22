@@ -27,6 +27,10 @@ namespace Quizmaker {
 	    [GtkChild] unowned Gtk.Label description_label;
 	    [GtkChild] unowned QuestionList list;
 
+	    private const ActionEntry[] WIN_ENTRIES = {
+	        { "save", save_action }
+	    };
+
         private Core.Quiz _quiz;
 	    public Core.Quiz quiz {
 	        get {
@@ -45,12 +49,22 @@ namespace Quizmaker {
 			Object (
 			    application: app
 			);
+
+			application.set_accels_for_action ("win.save", { "<Ctrl>S" });
 		}
 
 		construct {
 		    color_button.color_activated.connect ((c) => {
 		        quiz.color = c;
 		    });
+
+		    var action_group = new SimpleActionGroup ();
+		    action_group.add_action_entries (WIN_ENTRIES, this);
+		    insert_action_group ("win", action_group);
+		}
+
+		private void save_action () {
+		    quiz.save ();
 		}
 
 		[GtkCallback]
@@ -85,11 +99,6 @@ namespace Quizmaker {
             });
 
             filechooser.show ();
-		}
-
-		[GtkCallback]
-		private void on_save_button_clicked () {
-		    quiz.save ();
 		}
 	}
 }
