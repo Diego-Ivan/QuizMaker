@@ -68,6 +68,9 @@ namespace Quizmaker.Core {
 
             doc->set_root_element (node);
 
+            Xml.Node* comment_node = new Xml.Node.comment (@"Generated using $(Config.PRETTY_NAME) $(Config.VERSION)");
+            node->add_child (comment_node);
+
             title_node = node->new_text_child (null, "title", "");
             description_node = node->new_text_child (null, "description", "");
             color_node = node->new_text_child (null, "color", "rgba(0,0,0,1)");
