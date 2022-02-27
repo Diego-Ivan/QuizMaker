@@ -51,6 +51,8 @@ namespace Quizmaker {
 			);
 
 			application.set_accels_for_action ("win.save", { "<Ctrl>S" });
+
+			quiz = new Core.Quiz ();
 		}
 
 		construct {
@@ -64,7 +66,39 @@ namespace Quizmaker {
 		}
 
 		private void save_action () {
-		    quiz.save ();
+		    if (quiz.file_location == "") {
+		        var filters = new Gtk.FileFilter () {
+		            name = "XML"
+		        };
+
+		        filters.add_suffix ("quizzek");
+		        filters.add_suffix ("xml");
+
+		        var filechooser = new Gtk.FileChooserNative (
+		            null,
+		            this,
+		            SAVE,
+		            null,
+		            null
+		        );
+		        filechooser.add_filter (filters);
+
+		        filechooser.response.connect ((res) => {
+		            if (res == Gtk.ResponseType.ACCEPT) {
+		                var path = filechooser.get_file ().get_path ();
+		                quiz.file_location = path;
+                        quiz.save ();
+		            }
+		            else {
+		                warning ("Save to fail quiz %s: No location chosen", quiz.title);
+		            }
+		        });
+
+		        filechooser.show ();
+		    }
+		    else {
+		        quiz.save ();
+		    }
 		}
 
 		[GtkCallback]
