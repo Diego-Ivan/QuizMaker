@@ -36,10 +36,6 @@ namespace Quizmaker.Core {
             _name = node->get_content ();
         }
 
-        ~Option () {
-            message ("Option is being deleted");
-        }
-
         public void ask_deletion () {
             node->unlink ();
         }

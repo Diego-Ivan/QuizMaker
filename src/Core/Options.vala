@@ -55,7 +55,6 @@ namespace Quizmaker.Core {
             Xml.Node* new_node = node->new_child (null, "option", "");
             new_node->set_name ("option");
 
-            message ("Created new option node");
             var n_option = new Option (new_node);
             options.append (n_option);
 

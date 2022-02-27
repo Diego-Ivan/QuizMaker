@@ -51,8 +51,6 @@ namespace Quizmaker.Core {
 
             Xml.Node* option_node = node->new_text_child (null, "options", "");
             option_list = new Options.from_xml (option_node);
-
-            message ("Creating Question");
         }
 
         public Question.from_xml (Xml.Node* n) {

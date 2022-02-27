@@ -90,8 +90,6 @@ namespace Quizmaker.Core {
             if (name.has_prefix (":"))
                 name = name.slice (1, name.length);
 
-            message (name);
-
             if (name != "quiz") {
                 throw new QuizError.NOT_QUIZ_FILE ("File parsed is not a Quizzek file");
             }
