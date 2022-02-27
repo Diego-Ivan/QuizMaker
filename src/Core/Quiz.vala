@@ -80,22 +80,16 @@ namespace Quizmaker.Core {
                 throw new QuizError.FILE_NOT_FOUND ("File %s is not accessible".printf (path));
             }
 
-            Xml.Node* root = doc->get_root_element ();
-            if (root == null) {
+            node = doc->get_root_element ();
+            if (node == null) {
                 throw new QuizError.NO_ROOT_ELEMENT ("No root found in the file");
             }
 
-            string name = root->name;
-
-            if (name.has_prefix (":"))
-                name = name.slice (1, name.length);
-
-            if (name != "quiz") {
+            if (node->name != "quiz") {
                 throw new QuizError.NOT_QUIZ_FILE ("File parsed is not a Quizzek file");
             }
-            node = root;
 
-            retrieve_elements (root);
+            retrieve_elements ();
         }
 
         ~Quiz () {
@@ -128,7 +122,7 @@ namespace Quizmaker.Core {
             questions.remove (q);
         }
 
-        private void retrieve_elements (Xml.Node* node) {
+        private void retrieve_elements () {
             assert (node->name == "quiz" || node->name == ":quiz");
 
             for (Xml.Node* iter = node->children; iter != null; iter = iter->next) {
