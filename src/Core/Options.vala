@@ -6,9 +6,6 @@
  */
 
 namespace Quizmaker.Core {
-    public errordomain OptionError {
-        NON_VALID_ELEMENT
-    }
     public class Options : Object {
         public Xml.Node* node { private get; protected set construct; }
         private List<Option> options = new List<Option> ();
@@ -18,7 +15,21 @@ namespace Quizmaker.Core {
                 return options.length ();
             }
         }
-        public Option right_answer { get; set; }
+
+        private Xml.Node* r_answer_node;
+        private Option _right_answer;
+        public Option right_answer {
+            get {
+                return _right_answer;
+            }
+            set {
+                _right_answer = value;
+                r_answer_node = value.node;
+
+                if (r_answer_node->get_prop ("correct") == null)
+                    r_answer_node->new_prop ("correct", "true");
+            }
+        }
 
         public Options.from_xml (Xml.Node* n) {
             assert (n->name == "options");
@@ -41,8 +52,7 @@ namespace Quizmaker.Core {
         }
 
         public Option add_new_option () {
-            Xml.Ns* ns = new Xml.Ns (null, "", "");
-            Xml.Node* new_node = node->new_child (ns, "option", "");
+            Xml.Node* new_node = node->new_child (null, "option", "");
             new_node->set_name ("option");
 
             message ("Created new option node");
