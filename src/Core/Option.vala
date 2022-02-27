@@ -7,7 +7,7 @@
 
 namespace Quizmaker.Core {
     public class Option : Object {
-        public Xml.Node* node { private get; set construct; }
+        public Xml.Node* node { get; set construct; }
 
         private string _name;
         public string name {
@@ -34,9 +34,6 @@ namespace Quizmaker.Core {
                 }
             }
             _name = node->get_content ();
-
-            message (name);
-            message (node->get_content ());
         }
 
         ~Option () {
