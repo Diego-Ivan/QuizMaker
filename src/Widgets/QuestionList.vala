@@ -18,8 +18,8 @@ namespace Quizmaker {
             set {
                 quiz_ = value;
                 delete_all_rows.begin (() => {
-                    foreach (var q in value.questions) {
-                        add_slide.begin (q);
+                    for (int i = 0; i < value.length; i++) {
+                        add_slide (value.get_question_at (i));
                     }
                 });
             }
@@ -33,15 +33,13 @@ namespace Quizmaker {
 
         [GtkCallback]
         private void on_add_button_clicked () {
-            add_slide.begin ();
+            add_slide ();
         }
 
-        private async void add_slide (Core.Question? q = new Core.Question ()) {
+        private void add_slide (Core.Question? q = quiz.add_question ()) {
             item_number++;
 
-            var child = new QuestionRow () {
-                question = q
-            };
+            var child = new QuestionRow (q);
 
             child.trash_request.connect (handle_trash_requests);
 
@@ -53,6 +51,7 @@ namespace Quizmaker {
         }
 
         private void dispose_row (QuestionRow row) {
+            quiz.delete_question (row.question);
             listbox.remove (row);
             row.dispose ();
 
@@ -60,6 +59,9 @@ namespace Quizmaker {
         }
 
         private async void delete_all_rows () {
+            if (quiz.length == 0)
+                return;
+
             var n = item_number;
             for (int i = 0; i <= n; i++) {
                 QuestionRow? row = listbox.get_row_at_index (0) as QuestionRow;

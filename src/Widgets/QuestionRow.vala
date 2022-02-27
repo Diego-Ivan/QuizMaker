@@ -25,6 +25,12 @@ namespace Quizmaker {
             }
         }
 
+        public QuestionRow (Core.Question q) {
+            Object (
+                question: q
+            );
+        }
+
         /* Signals */
         public signal void trash_request (QuestionRow r);
 
