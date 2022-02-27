@@ -13,9 +13,32 @@ namespace Quizmaker.Core {
     }
 
     public class Quiz : Object {
-        public string title { get; set; }
-        public string description { get; set; }
-        public string file_location { get; set; }
+        private Xml.Node* node;
+        public string file_location { get; set; default = ""; }
+
+        private Xml.Node* title_node;
+        private string _title;
+        public string title {
+            get {
+                return _title;
+            }
+            set {
+                _title = value;
+                title_node->set_content (value);
+            }
+        }
+
+        private Xml.Node* description_node;
+        private string _description;
+        public string description {
+            get {
+                return _description;
+            }
+            set {
+                _description = value;
+                description_node->set_content (value);
+            }
+        }
 
         private Xml.Node* color_node;
         private Gdk.RGBA _color;
@@ -29,8 +52,26 @@ namespace Quizmaker.Core {
             }
         }
 
-        public List<Question> questions = new List<Question> ();
+        private List<Question> questions = new List<Question> ();
+        public uint length {
+            get {
+                return questions.length ();
+            }
+        }
+
         private Xml.Doc* doc;
+
+        public Quiz () {
+            doc = new Xml.Doc ("1.0");
+
+            node = new Xml.Node (null, "quiz");
+
+            doc->set_root_element (node);
+
+            title_node = node->new_text_child (null, "title", "");
+            description_node = node->new_text_child (null, "description", "");
+            color_node = node->new_text_child (null, "color", "rgba(0,0,0,1)");
+        }
 
         public Quiz.from_file (string path) throws QuizError {
             file_location = path;
@@ -44,9 +85,17 @@ namespace Quizmaker.Core {
                 throw new QuizError.NO_ROOT_ELEMENT ("No root found in the file");
             }
 
-            if (root->name != "quiz") {
+            string name = root->name;
+
+            if (name.has_prefix (":"))
+                name = name.slice (1, name.length);
+
+            message (name);
+
+            if (name != "quiz") {
                 throw new QuizError.NOT_QUIZ_FILE ("File parsed is not a Quizzek file");
             }
+            node = root;
 
             retrieve_elements (root);
         }
@@ -63,23 +112,43 @@ namespace Quizmaker.Core {
             doc->save_format_file (file_location, 1);
         }
 
+        public Question get_question_at (uint x) {
+            return questions.nth_data (x);
+        }
+
+        public Question add_question () {
+            Xml.Node* n = node->new_text_child (null, "question", "");
+
+            var question = new Question (n);
+            questions.append (question);
+
+            return question;
+        }
+
+        public void delete_question (Question q) {
+            q.ask_deletion ();
+            questions.remove (q);
+        }
+
         private void retrieve_elements (Xml.Node* node) {
-            assert (node->name == "quiz");
+            assert (node->name == "quiz" || node->name == ":quiz");
 
             for (Xml.Node* iter = node->children; iter != null; iter = iter->next) {
                 if (iter->type == ELEMENT_NODE) {
                     switch (iter->name) {
                         case "title":
-                            title = get_node_content (iter, "title");
+                            title_node = get_content_node (iter, "title");
+                            _title = title_node->get_content ();
                             break;
 
                         case "description":
-                            description = get_node_content (iter, "description");
+                            description_node = get_content_node (iter, "description");
+                            _description = description_node->get_content ();
                             break;
 
                         case "color":
-                            color_node = iter;
-                            color.parse (get_node_content (iter, "color"));
+                            color_node = get_content_node (iter, "color");
+                            _color.parse (color_node->get_content ());
                             break;
 
                         case "question":
@@ -95,15 +164,16 @@ namespace Quizmaker.Core {
             }
         }
 
-        private string? get_node_content (Xml.Node* node, string node_name) {
-            assert (node->name == node_name);
-            for (Xml.Node* i = node->children; i != null; i = i->next) {
+        private Xml.Node* get_content_node (Xml.Node* n, string node_name) {
+            assert (n->name == node_name);
+
+            for (Xml.Node* i = n->children; i != null; i = i->next) {
                 if (i->type == TEXT_NODE) {
-                    return i->get_content ();
+                    return i;
                 }
             }
 
-            return null;
+            return n;
         }
     }
 }
