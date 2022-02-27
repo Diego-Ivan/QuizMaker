@@ -52,6 +52,18 @@ namespace Quizmaker.Core {
             }
         }
 
+        private Xml.Node* randomize_node;
+        private bool _randomize;
+        public bool randomize {
+            get {
+                return _randomize;
+            }
+            set {
+                _randomize = value;
+                randomize_node->set_content (value.to_string ());
+            }
+        }
+
         private List<Question> questions = new List<Question> ();
         public uint length {
             get {
@@ -68,12 +80,13 @@ namespace Quizmaker.Core {
 
             doc->set_root_element (node);
 
-            Xml.Node* comment_node = new Xml.Node.comment (@"Generated using $(Config.PRETTY_NAME) $(Config.VERSION)");
+            Xml.Node* comment_node = new Xml.Node.comment (@"Generated using $(Config.PRETTY_NAME) $(Config.VERSION) - DO NOT MODIFY");
             node->add_child (comment_node);
 
             title_node = node->new_text_child (null, "title", "");
             description_node = node->new_text_child (null, "description", "");
             color_node = node->new_text_child (null, "color", "rgba(0,0,0,1)");
+            randomize_node = node->new_text_child (null, "randomize", "false");
         }
 
         public Quiz.from_file (string path) throws QuizError {
@@ -91,6 +104,11 @@ namespace Quizmaker.Core {
             if (node->name != "quiz") {
                 throw new QuizError.NOT_QUIZ_FILE ("File parsed is not a Quizzek file");
             }
+
+            title_node = node->new_text_child (null, "title", "");
+            description_node = node->new_text_child (null, "description", "");
+            color_node = node->new_text_child (null, "color", "rgba(0,0,0,1)");
+            randomize_node = node->new_text_child (null, "randomize", "false");
 
             retrieve_elements ();
         }
@@ -132,16 +150,19 @@ namespace Quizmaker.Core {
                 if (iter->type == ELEMENT_NODE) {
                     switch (iter->name) {
                         case "title":
+                            title_node->unlink ();
                             title_node = get_content_node (iter, "title");
                             _title = title_node->get_content ();
                             break;
 
                         case "description":
+                            description_node->unlink ();
                             description_node = get_content_node (iter, "description");
                             _description = description_node->get_content ();
                             break;
 
                         case "color":
+                            color_node->unlink ();
                             color_node = get_content_node (iter, "color");
                             _color.parse (color_node->get_content ());
                             break;
@@ -151,8 +172,21 @@ namespace Quizmaker.Core {
                             questions.append (question);
                             break;
 
+                        case "randomize":
+                            randomize_node->unlink ();
+                            randomize_node = get_content_node (iter, "randomize");
+
+                            bool result = bool.try_parse (randomize_node->get_content (), out _randomize);
+
+                            if (!result) {
+                                warning ("Failed to parse value from randomize node. Defaulting to false");
+                                randomize = false;
+                            }
+
+                            break;
+
                         default:
-                            warning ("Unknown tag at %u : %s", iter->line, iter->name);
+                            warning ("Unknown tag at line %u :<%s>", iter->line, iter->name);
                             break;
                     }
                 }
