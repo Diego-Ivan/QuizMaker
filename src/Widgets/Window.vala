@@ -26,12 +26,14 @@ namespace Quizmaker {
 	    [GtkChild] unowned Gtk.Label title_label;
 	    [GtkChild] unowned Gtk.Label description_label;
 	    [GtkChild] unowned QuestionList list;
+	    [GtkChild] unowned Gtk.Switch randomize_switch;
+	    [GtkChild] unowned Gtk.ProgressBar progress_bar;
 
 	    private const ActionEntry[] WIN_ENTRIES = {
 	        { "save", save_action }
 	    };
 
-        private Core.Quiz _quiz;
+	    private Core.Quiz _quiz;
 	    public Core.Quiz quiz {
 	        get {
 	            return _quiz;
@@ -41,6 +43,7 @@ namespace Quizmaker {
 	            color_button.rgba = value.color;
 	            title_label.label = value.title;
 	            description_label.label = value.description;
+	            randomize_switch.active = value.randomize;
 	            list.quiz = value;
 	        }
 	    }
@@ -51,8 +54,11 @@ namespace Quizmaker {
 			);
 
 			application.set_accels_for_action ("win.save", { "<Ctrl>S" });
-
 			quiz = new Core.Quiz ();
+
+			randomize_switch.notify["active"].connect (() => {
+			    quiz.randomize = randomize_switch.active;
+			});
 		}
 
 		construct {
@@ -66,6 +72,18 @@ namespace Quizmaker {
 		}
 
 		private void save_action () {
+		    var callback_target = new Adw.CallbackAnimationTarget (progress_bar_pulse_callback);
+
+		    var animation = new Adw.TimedAnimation (progress_bar,
+		        0, 1, 500,
+		        callback_target
+		    );
+		    animation.easing = EASE_IN_OUT_SINE;
+
+		    progress_bar.opacity = 1;
+
+		    animation.play ();
+
 		    if (quiz.file_location == "") {
 		        var filters = new Gtk.FileFilter () {
 		            name = "XML"
@@ -99,6 +117,10 @@ namespace Quizmaker {
 		    else {
 		        quiz.save ();
 		    }
+
+	        animation.done.connect (() => {
+	            progress_bar_fadeout ();
+	        });
 		}
 
 		[GtkCallback]
@@ -133,6 +155,28 @@ namespace Quizmaker {
             });
 
             filechooser.show ();
+		}
+
+		private void progress_bar_fadeout () {
+		    var target_callback = new Adw.CallbackAnimationTarget (progress_bar_fadeout_callback);
+
+		    var animation = new Adw.TimedAnimation (progress_bar,
+		        0, 1, 400,
+		        target_callback
+		    );
+		    animation.easing = EASE_IN_OUT_CUBIC;
+		    animation.play ();
+		}
+
+		public void progress_bar_fadeout_callback (double value) {
+		    if (value == 0)
+		        progress_bar.fraction = 0;
+		    else
+		        progress_bar.opacity = 1 - value;
+		}
+
+		public void progress_bar_pulse_callback (double value) {
+		    progress_bar.fraction = value;
 		}
 	}
 }

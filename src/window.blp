@@ -38,21 +38,84 @@ template QuizmakerWindow : Adw.ApplicationWindow {
          }
       }
 
-      Adw.Clamp {
-         Gtk.Overlay {
-            vexpand: true;
+      Gtk.Overlay {
+         vexpand: true;
+
+         [overlay]
+         Gtk.ProgressBar progress_bar {
+            styles ["osd"]
+            hexpand: true;
+            halign: fill;
+            valign: start;
+            vexpand: false;
+
+            layout {
+               measure: true;
+            }
+         }
+
+         Adw.Clamp {
             Gtk.Box {
                orientation: vertical;
                spacing: 12;
 
-               Gtk.Label title_label {
-                  styles ["large-title"]
-                  wrap: true;
-               }
+               Gtk.Box {
+                  orientation: horizontal;
+                  hexpand: true;
 
-               Gtk.Label description_label {
-                  styles ["dim-label"]
-                  wrap: true;
+                  Gtk.Box {
+                     orientation: vertical;
+                     spacing: 12;
+
+                     Gtk.Label title_label {
+                        styles ["large-title"]
+                        xalign: 0;
+                        wrap: true;
+                     }
+
+                     Gtk.Label description_label {
+                        styles ["dim-label"]
+                        xalign: 0;
+                        wrap: true;
+                     }
+                  }
+
+                  Gtk.MenuButton {
+                     styles ["flat"]
+                     hexpand: true;
+                     halign: end;
+                     vexpand: false;
+                     valign: center;
+                     icon-name: "view-more-symbolic";
+
+                     popover: Gtk.Popover {
+                        autohide: true;
+
+                        child: Gtk.Box {
+                           orientation: vertical;
+                           spacing: 6;
+                           margin-top: 6;
+                           margin-bottom: 6;
+                           margin-start: 6;
+                           margin-end: 6;
+
+                           Gtk.Box {
+                              orientation: horizontal;
+                              hexpand: true;
+                              spacing: 12;
+
+                              Gtk.Label {
+                                 label: _("Randomize questions");
+                              }
+
+                              Gtk.Switch randomize_switch {
+                                 hexpand: true;
+                                 halign: end;
+                              }
+                           }
+                        };
+                     };
+                  }
                }
 
                .QuizmakerQuestionList list {}
