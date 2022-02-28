@@ -117,10 +117,6 @@ namespace Quizmaker.Core {
             delete doc;
         }
 
-        construct {
-            color = { 0, 0, 0, 0 };
-        }
-
         public void save () {
             doc->save_format_file (file_location, 1);
         }
